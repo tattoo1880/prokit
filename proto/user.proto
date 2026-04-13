@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/tattoo1880/protkit/proto";
+
+import "google/protobuf/timestamp.proto";
+
+// 用户性别
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  GENDER_MALE        = 1;
+  GENDER_FEMALE      = 2;
+}
+
+// 用户状态
+enum UserStatus {
+  USER_STATUS_UNSPECIFIED = 0;
+  USER_STATUS_ACTIVE      = 1;
+  USER_STATUS_INACTIVE    = 2;
+  USER_STATUS_BANNED      = 3;
+}
+
+// 联系地址
+message Address {
+  string province = 1;
+  string city     = 2;
+  string district = 3;
+  string street   = 4;
+  string zip_code = 5;
+}
+
+// 用户信息
+message User {
+  int64                     id         = 1;
+  string                    username   = 2;
+  string                    email      = 3;
+  string                    phone      = 4;
+  Gender                    gender     = 5;
+  int32                     age        = 6;
+  Address                   address    = 7;
+  repeated string           tags       = 8;
+  map<string, string>       extra      = 9;
+  UserStatus                status     = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+// 用户列表
+message UserList {
+  repeated User users       = 1;
+  int32         total_count = 2;
+}

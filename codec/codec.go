@@ -5,20 +5,29 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"reflect"
 
 	"google.golang.org/protobuf/proto"
 )
 
 // Marshal / Unmarshal 基础封装
-func Marshal(m proto.Message) ([]byte, error) {
+func isNilMessage(m proto.Message) bool {
 	if m == nil {
+		return true
+	}
+	v := reflect.ValueOf(m)
+	return v.Kind() == reflect.Ptr && v.IsNil()
+}
+
+func Marshal(m proto.Message) ([]byte, error) {
+	if isNilMessage(m) {
 		return nil, fmt.Errorf("nil proto message")
 	}
 	return proto.Marshal(m)
 }
 
 func Unmarshal(b []byte, m proto.Message) error {
-	if m == nil {
+	if isNilMessage(m) {
 		return fmt.Errorf("nil proto message")
 	}
 	return proto.Unmarshal(b, m)
